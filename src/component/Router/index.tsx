@@ -1,8 +1,6 @@
 import React, {lazy, Suspense, useEffect, useState} from 'react'
 import {
   Navigate,
-  Route,
-  Routes,
   BrowserRouter,
   useNavigate,
   useLocation,
@@ -16,6 +14,7 @@ import { selectIsMobile, selectMenuRoute, selectUserInfo, setIsMobile, setIsWx }
 import Layout from '../Layout'
 import packageConfig from '../../../package.json'
 import LayoutMobile from '../LayoutMobile'
+import {Route, Routes} from "react-router-loading";
 
 export let dispatch: AppDispatch
 
