@@ -69,6 +69,7 @@ const getRoutes: any = (routes: any) =>
         key={menu.path}
         path={menu.path}
         {...(menu.element ? { element: LazyLoad(menu.element) } : {})}
+        loading
       >
         {menu.routers && getRoutes(menu.routers)}
       </Route>

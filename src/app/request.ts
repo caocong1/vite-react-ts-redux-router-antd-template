@@ -10,12 +10,10 @@ const request = axios.create({
 })
 
 request.interceptors.request.use(function (config) {
-  const token = localStorage.token
+  const token = localStorage.token || ''
   let headers: AxiosRequestHeaders = {}
   if (token && config.url !== '/login') {
-    headers = {
-      token: token || '',
-    }
+    headers = { token }
   }
   return {
     ...config,
