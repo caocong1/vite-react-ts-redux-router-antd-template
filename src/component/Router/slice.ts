@@ -1,6 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
 
+export interface RouterData {
+  name: string;
+  icon: string;
+  path: string;
+  element: string;
+  routers: RouterData[];
+  visible?: number;
+}
+
 export interface RouterState {
   loginStatus: boolean;
   menuRoute: any;
@@ -9,15 +18,7 @@ export interface RouterState {
   routerInfo: any;
   isMobile: boolean;
   isWx: boolean;
-}
-
-interface RouterData {
-  name: string;
-  icon: string;
-  path: string;
-  element: string;
-  routers: RouterData[];
-  visible?: number;
+  noLayout: boolean;
 }
 
 const mobileRouter: RouterData[] = [
@@ -44,12 +45,13 @@ const router: RouterData[]  = [
 
 const initialState: RouterState = {
   loginStatus: false,
-  menuRoute: mobileRouter,
+  menuRoute: router,
   userInfo: null,
   orgInfo: null,
   routerInfo: null,
   isMobile: true,
   isWx: false,
+  noLayout: false,
 }
 
 // export const getUserInfoReduce = createAsyncThunk(
@@ -84,6 +86,9 @@ export const routerSlice = createSlice({
     setIsWx: (state, action) => {
       state.isWx = action.payload
     },
+    setNoLayout: (state, action) => {
+      state.noLayout = action.payload
+    },
   },
   // extraReducers: (builder) => {
   // builder
@@ -96,7 +101,7 @@ export const routerSlice = createSlice({
   // },
 })
 
-export const { setLoginStatus, setUserInfo, setOrgInfo, setIsMobile, setIsWx } = routerSlice.actions
+export const { setLoginStatus, setUserInfo, setOrgInfo, setIsMobile, setIsWx, setNoLayout } = routerSlice.actions
 
 export const selectUserInfo: (state: RootState) => any = (state) =>
   state.router.userInfo
@@ -115,5 +120,8 @@ export const selectIsMobile: (state: RootState) => any = (state) =>
 
 export const selectIsWx: (state: RootState) => any = (state) =>
   state.router.isWx
+
+export const selectNoLayout: (state: RootState) => any = (state) =>
+  state.router.noLayout
 
 export default routerSlice.reducer

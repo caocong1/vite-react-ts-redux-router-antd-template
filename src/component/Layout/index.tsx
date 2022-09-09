@@ -5,7 +5,7 @@ import { LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-desig
 import UserOutlined from '@ant-design/icons/UserOutlined'
 import './index.less'
 import { useAppSelector } from '../../app/hooks'
-import { selectMenuRoute } from '../Router/slice'
+import {selectMenuRoute, selectNoLayout} from '../Router/slice'
 import { myLocation, myNavigate } from '../Router'
 import SvgIcon from '../SvgIcon'
 
@@ -45,6 +45,7 @@ const LayoutContainer: React.FC = () => {
   const menuRoute = useAppSelector(selectMenuRoute)
   const [locationPathnameList, setLocationPathnameList] = useState(myLocation.pathname.split('/'))
   const [collapsed, setCollapsed] = useState(false)
+  const noLayout = useAppSelector(selectNoLayout)
 
   const autoCollapseSideBar = () => {
     if (window.innerWidth <= 800) {
@@ -65,7 +66,7 @@ const LayoutContainer: React.FC = () => {
     setLocationPathnameList(myLocation.pathname.split('/'))
   }, [myLocation.pathname])
 
-  return (
+  return noLayout ? <Outlet /> : (
     <Layout className="main-layout" hasSider>
       <Layout.Sider
         className="main-sidebar"

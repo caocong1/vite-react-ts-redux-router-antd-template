@@ -1,19 +1,18 @@
-import React, {lazy, Suspense, useEffect, useState} from 'react'
+import React, {Suspense, useEffect} from 'react'
 import {
   Navigate,
   BrowserRouter,
   useNavigate,
   useLocation,
   NavigateFunction,
-  Location, Outlet,
+  Location,
 } from 'react-router-dom'
 import LoadingPage from '../LoadingPage'
 import { AppDispatch } from '../../app/store'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { selectIsMobile, selectMenuRoute, selectUserInfo, setIsMobile, setIsWx } from './slice'
+import {RouterData, selectMenuRoute, selectUserInfo, setIsMobile, setIsWx, setNoLayout } from './slice'
 import Layout from '../Layout'
 import packageConfig from '../../../package.json'
-import LayoutMobile from '../LayoutMobile'
 import {Route, Routes} from "react-router-loading";
 
 export let dispatch: AppDispatch
@@ -28,7 +27,7 @@ const RoutePage: React.FC = () => {
 }
 
 // 获取首条路由
-const getFirstPath: any = (menuRoute: any, fatherPath: string) => {
+const getFirstPath: (menuRoute: RouterData[], fatherPath: string) => string = (menuRoute, fatherPath) => {
   if (!menuRoute.length) {
     return '/'
   }
@@ -41,14 +40,14 @@ const getFirstPath: any = (menuRoute: any, fatherPath: string) => {
   )
 }
 
-const routerElements: any = import.meta.glob('/src/page/**/[a-z[]*.tsx')
+const routerElements = import.meta.glob('/src/page/**/[a-z[]*.tsx') as Record<string, () => Promise<{ default: React.ComponentType<any>; }>>
 const pagePath = '/src/page/'
 
 const LazyLoad = (element: string) => {
   const p = pagePath + element
   const importElement = routerElements[p]
   if (importElement){
-    const Component = lazy(importElement)
+    const Component = React.lazy(importElement)
     return (
       <>
         <Suspense fallback={<LoadingPage />}>
@@ -87,13 +86,12 @@ const noLayoutPaths: string[] = []
 const RouteUtil: React.FC = () => {
   myNavigate = useNavigate()
   myLocation = useLocation()
-  const [layout, setLayout] = useState(true)
   const menuRoute = useAppSelector(selectMenuRoute)
-  const isMobile = useAppSelector(selectIsMobile)
+  // const isMobile = useAppSelector(selectIsMobile)
   const userInfo = useAppSelector(selectUserInfo)
 
   useEffect(() => {
-    setLayout(!noLayoutPaths.includes(myLocation.pathname))
+    dispatch(setNoLayout(noLayoutPaths.includes(myLocation.pathname)))
   }, [myLocation])
 
   useEffect(() => {
@@ -113,7 +111,7 @@ const RouteUtil: React.FC = () => {
 
   return userInfo ? (
     <Routes>
-      <Route path="/" element={layout ? isMobile ? <LayoutMobile /> : <Layout/> : <Outlet />}>
+      <Route path="/" element={<Layout />}>
         <Route index element={<Navigate to={getFirstPath(menuRoute, '')} />} />
         {getRoutes(menuRoute)}
       </Route>
