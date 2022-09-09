@@ -81,6 +81,8 @@ export const routerSlice = createSlice({
       state.isMobile = action.payload
       if (action.payload) {
         state.menuRoute = mobileRouter
+      } else {
+        state.menuRoute = router
       }
     },
     setIsWx: (state, action) => {
