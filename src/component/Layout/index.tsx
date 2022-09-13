@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router-dom'
-import React, {useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Breadcrumb, Button, Layout, Menu, Tooltip, Typography } from 'antd'
 import { LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import UserOutlined from '@ant-design/icons/UserOutlined'
-import './index.less'
 import { useAppSelector } from '../../app/hooks'
-import {selectMenuRoute} from '../Router/slice'
+import { selectMenuRoute } from '../Router/slice'
 import { myLocation, myNavigate } from '../Router'
 import SvgIcon from '../SvgIcon'
-import {useLoadingContext} from "react-router-loading";
+import styles from './index.module.less'
+import { useLoadingContext } from '@caocong/react-router-loading'
 
 const title: string = import.meta.env.VITE_TITLE
 
@@ -43,7 +43,7 @@ const getBread = (pathSnippets: string[], menuRoute: any) => {
 }
 
 // 不需要layout的path
-const noLayoutPaths: string[] = ['/flow-edit']
+const noLayoutPaths: string[] = []
 export let loadingDone: () => void
 
 const LayoutContainer: React.FC = () => {
@@ -77,10 +77,10 @@ const LayoutContainer: React.FC = () => {
     setLocationPathnameList(myLocation.pathname.split('/'))
   }, [myLocation.pathname])
 
-  return noLayout ? <Outlet /> : (
-    <Layout className="main-layout" hasSider>
+  return (
+    <Layout className={styles.mainLayout} hasSider>
       <Layout.Sider
-        className="main-sidebar"
+        className={styles.mainSidebar}
         width={320}
         style={{
           height: '100vh',
@@ -88,6 +88,7 @@ const LayoutContainer: React.FC = () => {
           left: 0,
           top: 0,
           bottom: 0,
+          display: noLayout ? 'none' : 'block',
         }}
         collapsed={collapsed}
       >
@@ -104,7 +105,7 @@ const LayoutContainer: React.FC = () => {
           </Tooltip>
         </Layout.Header>
         <Menu
-          className="main-menu"
+          className={styles.mainMenu}
           theme="dark"
           mode="inline"
           selectedKeys={[locationPathnameList.join('/')]}
@@ -139,13 +140,13 @@ const LayoutContainer: React.FC = () => {
           <Button type="text" onClick={() => {setCollapsed((c) => !c)}} style={{ color: '#fff' }} icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} />
         </div>
       </Layout.Sider>
-      <Layout style={{ marginLeft: collapsed ? 80 : 320 }}>
-        <div style={{ height: 64, display: 'flex', alignItems: 'center', padding: '0 32px', backgroundColor: '#fff' }}>
+      <Layout style={{ marginLeft: noLayout ? 0 : (collapsed ? 80 : 320) }}>
+        <div style={{ height: noLayout ? 0 : 64, display: 'flex', alignItems: 'center', padding: '0 32px', backgroundColor: '#fff' }}>
           <Breadcrumb style={{ fontSize: '24px' }}>
             {getBread(locationPathnameList.slice(1), menuRoute)}
           </Breadcrumb>
         </div>
-        <Layout.Content style={{ height: 'calc(100vh - 64px)', overflow: 'auto' }}>
+        <Layout.Content style={{ height: noLayout ? '100vh' : 'calc(100vh - 64px)', overflow: 'auto' }}>
           <Outlet />
         </Layout.Content>
       </Layout>

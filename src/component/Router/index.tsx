@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import {RouterData, selectMenuRoute, selectUserInfo, setIsMobile, setIsWx } from './slice'
 import Layout from '../Layout'
 import packageConfig from '../../../package.json'
-import {Route, Routes} from "react-router-loading";
+import {Route, Routes} from "@caocong/react-router-loading"
 
 export let dispatch: AppDispatch
 

@@ -1,0 +1,49 @@
+@import url(/src/style/variables.less);
+
+.mainLayout {
+  .mainSidebar {
+    user-select: none;
+    background-color: @menu-background-color !important;
+
+    :global {
+      .ant-layout-header, .ant-menu, .ant-menu-sub {
+        background-color: @menu-background-color !important;
+      }
+
+      .ant-menu-item-selected {
+        background-color: @menu-selected-color !important;
+
+        .svg {
+          svg {
+            fill: #fff !important;
+          }
+        }
+      }
+    }
+
+    .mainMenu {
+      overflow: auto;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+
+      &:global(::-webkit-scrollbar) {
+        width: 12px;
+      }
+
+      &:global(::-webkit-scrollbar-thumb) {
+        border-radius: 10px;
+        background: #eee;
+        border: 2px solid @menu-background-color;
+      }
+
+      &:global(::-webkit-scrollbar-thumb:hover) {
+        background: #fff;
+      }
+
+      &:global(::-webkit-scrollbar-thumb:active) {
+        background: #ddd;
+      }
+    }
+  }
+}
+
