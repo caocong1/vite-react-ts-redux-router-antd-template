@@ -1,13 +1,14 @@
 import { Outlet } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
+import React, {useCallback, useEffect, useState } from 'react'
 import { Breadcrumb, Button, Layout, Menu, Tooltip, Typography } from 'antd'
 import { LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import UserOutlined from '@ant-design/icons/UserOutlined'
 import './index.less'
 import { useAppSelector } from '../../app/hooks'
-import {selectMenuRoute, selectNoLayout} from '../Router/slice'
+import {selectMenuRoute} from '../Router/slice'
 import { myLocation, myNavigate } from '../Router'
 import SvgIcon from '../SvgIcon'
+import {useLoadingContext} from "react-router-loading";
 
 const title: string = import.meta.env.VITE_TITLE
 
@@ -41,19 +42,29 @@ const getBread = (pathSnippets: string[], menuRoute: any) => {
   }
 }
 
+// 不需要layout的path
+const noLayoutPaths: string[] = ['/flow-edit']
+export let loadingDone: () => void
+
 const LayoutContainer: React.FC = () => {
   const menuRoute = useAppSelector(selectMenuRoute)
   const [locationPathnameList, setLocationPathnameList] = useState(myLocation.pathname.split('/'))
   const [collapsed, setCollapsed] = useState(false)
-  const noLayout = useAppSelector(selectNoLayout)
+  const [noLayout, setNoLayout] = useState(false)
+  const loadingContext = useLoadingContext()
 
-  const autoCollapseSideBar = () => {
+  loadingDone = useCallback(() => {
+    setNoLayout(noLayoutPaths.includes(myLocation.pathname))
+    loadingContext.done()
+  }, [myLocation.pathname])
+
+  const autoCollapseSideBar = useCallback(() => {
     if (window.innerWidth <= 800) {
       setCollapsed(true)
     } else {
       setCollapsed(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
     window.addEventListener('resize', autoCollapseSideBar)

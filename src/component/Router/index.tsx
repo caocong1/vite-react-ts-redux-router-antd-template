@@ -10,7 +10,7 @@ import {
 import LoadingPage from '../LoadingPage'
 import { AppDispatch } from '../../app/store'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import {RouterData, selectMenuRoute, selectUserInfo, setIsMobile, setIsWx, setNoLayout } from './slice'
+import {RouterData, selectMenuRoute, selectUserInfo, setIsMobile, setIsWx } from './slice'
 import Layout from '../Layout'
 import packageConfig from '../../../package.json'
 import {Route, Routes} from "react-router-loading";
@@ -80,19 +80,12 @@ export let myLocation: Location
 
 const skipLogin = false
 
-// 不需要layout的path
-const noLayoutPaths: string[] = []
-
 const RouteUtil: React.FC = () => {
   myNavigate = useNavigate()
   myLocation = useLocation()
   const menuRoute = useAppSelector(selectMenuRoute)
   // const isMobile = useAppSelector(selectIsMobile)
   const userInfo = useAppSelector(selectUserInfo)
-
-  useEffect(() => {
-    dispatch(setNoLayout(noLayoutPaths.includes(myLocation.pathname)))
-  }, [myLocation])
 
   useEffect(() => {
     if (skipLogin) return
