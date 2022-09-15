@@ -66,7 +66,7 @@ const FormDrawer: React.FC<FormDrawerProps> = ({ data, drawerProps = {}, formPro
         size="large"
         {...formProps}
       >
-        {React.Children.map(children, (child: any) => React.cloneElement(child, { form }))}
+        {React.Children && React.Children.map(children, (child: any) => child && React.cloneElement(child, { form }))}
       </Form>
     </Drawer>
   )
