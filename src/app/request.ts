@@ -1,7 +1,7 @@
 import { message } from 'antd'
-import axios, { AxiosRequestHeaders } from 'axios'
+import axios, {AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
 
-const request = axios.create({
+const axiosInstance = axios.create({
   // baseURL: import.meta.env.VITE_API,
   baseURL: '/api',
   method: 'POST',
@@ -9,7 +9,7 @@ const request = axios.create({
   withCredentials: true,
 })
 
-request.interceptors.request.use(function (config) {
+axiosInstance.interceptors.request.use(function (config) {
   const token = localStorage.token || ''
   let headers: AxiosRequestHeaders = {}
   if (token && config.url !== '/login') {
@@ -24,7 +24,7 @@ request.interceptors.request.use(function (config) {
   }
 })
 
-request.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   function (response) {
     if (response && response.data) {
       const { data } = response
@@ -43,5 +43,7 @@ request.interceptors.response.use(
     return Promise.reject(error)
   },
 )
+
+const request = <T>(cfg: AxiosRequestConfig) => axiosInstance.request<never, T>(cfg)
 
 export default request
