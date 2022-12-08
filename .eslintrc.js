@@ -20,6 +20,7 @@ module.exports = {
   'plugins': [
     'react',
     '@typescript-eslint',
+    "react-hooks",
   ],
   'rules': {
     'indent': ['error', 2, { 'SwitchCase': 1 }],
@@ -65,5 +66,7 @@ module.exports = {
     'react/jsx-indent': [2, 2, { checkAttributes: true, indentLogicalExpressions: true }],
     'react/jsx-first-prop-new-line': [2, 'multiline'],
     'react/jsx-newline': [2, { prevent: true }],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
 }
